@@ -1,18 +1,17 @@
 import requests
 
-def getAnimeFacts(anime_name: str) -> str:
+def get_random_quote() -> str:
     """
-    Get facts about an anime.
+    Get a random anime quote.
     """
-    url = f"https://anime-facts-rest-api.onrender.com/api/v1/{anime_name.lower()}"
+    url = "https://animechan.xyz/api/random"
     response = requests.get(url)
-    
+
     if response.status_code == 200:
         data = response.json()
-        if 'data' in data:
-            facts = [fact['fact'] for fact in data['data']]
-            return "\n".join(facts)
-        else:
-            return "No facts found."
+        quote = data.get("quote", "No quote found.")
+        character = data.get("character", "Unknown character")
+        anime = data.get("anime", "Unknown anime")
+        return f'"{quote}"\n- {character} ({anime})'
     else:
-        return "Anime not found or API error."
+        return "Could not fetch quote."

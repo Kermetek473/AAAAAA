@@ -1,19 +1,15 @@
 from mcp.server.fastmcp import FastMCP
-from app import getAnimeFacts
+from app import get_random_quote
 
 # Initialize MCP server
-mcp = FastMCP("anime-facts-mcp")
+mcp = FastMCP("animequote-mcp")
 
 @mcp.tool()
-async def get_anime_facts(anime_name: str) -> str:
+async def random_anime_quote() -> str:
     """
-    Get facts about an anime.
+    Get a random anime quote.
     """
-    facts = getAnimeFacts(anime_name)
-    if not facts:
-        return "No facts found."
-
-    return facts
+    return get_random_quote()
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")
