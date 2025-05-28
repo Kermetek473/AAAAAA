@@ -1,10 +1,14 @@
 startCommand:
   type: stdio
   configSchema:
-    # JSON Schema defining the configuration options for the MCP.
     type: object
-    properties: {}
-  commandFunction:
-    |-
+    properties:
+      lat:
+        type: number
+      lon:
+        type: number
+  commandFunction: |-
     (config) => ({ command: 'python', args: ['-m', 'server'] })
-  exampleConfig: {}
+  exampleConfig:
+    lat: 39.7456
+    lon: -97.0892

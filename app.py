@@ -1,17 +1,27 @@
 import requests
 
-def get_random_quote() -> str:
+def getForecast(lat: float, lon: float) -> str:
     """
-    Get a random anime quote.
+    Get weather forecast for a given latitude and longitude.
     """
-    url = "https://animechan.xyz/api/random"
-    response = requests.get(url)
+    # Step 1: Get gridpoint from lat/lon
+    points_url = f"https://api.weather.gov/points/{lat},{lon}"
+    points_response = requests.get(points_url)
 
-    if response.status_code == 200:
-        data = response.json()
-        quote = data.get("quote", "No quote found.")
-        character = data.get("character", "Unknown character")
-        anime = data.get("anime", "Unknown anime")
-        return f'"{quote}"\n- {character} ({anime})'
-    else:
-        return "Could not fetch quote."
+    if points_response.status_code != 200:
+        return "Could not fetch location data."
+
+    points_data = points_response.json()
+    forecast_url = points_data['properties']['forecast']
+
+    # Step 2: Get forecast
+    forecast_response = requests.get(forecast_url)
+
+    if forecast_response.status_code != 200:
+        return "Could not fetch forecast data."
+
+    forecast_data = forecast_response.json()
+    periods = forecast_data['properties']['periods']
+    forecast_strings = [f"{p['name']}: {p['detailedForecast']}" for p in periods[:3]]  # First 3 periods
+
+    return "\n".join(forecast_strings)

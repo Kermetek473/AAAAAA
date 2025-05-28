@@ -1,15 +1,15 @@
 from mcp.server.fastmcp import FastMCP
-from app import get_random_quote
+from app import getForecast
 
 # Initialize MCP server
-mcp = FastMCP("animequote-mcp")
+mcp = FastMCP("weather-mcp")
 
 @mcp.tool()
-async def random_anime_quote() -> str:
+async def get_forecast(lat: float, lon: float) -> str:
     """
-    Get a random anime quote.
+    Get weather forecast for a given latitude and longitude.
     """
-    return get_random_quote()
+    return getForecast(lat, lon)
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")
